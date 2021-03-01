@@ -1,0 +1,5 @@
+D:\fork\walker\target\x86_64-pc-windows-msvc\release\deps\walker.exe: src\main.rs
+
+D:\fork\walker\target\x86_64-pc-windows-msvc\release\deps\walker.d: src\main.rs
+
+src\main.rs:

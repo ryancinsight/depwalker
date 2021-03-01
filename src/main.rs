@@ -18,11 +18,12 @@ fn main() {
         *counter += 1;
         if (*counter == 1)
             && (f_name.ends_with(".dll") || f_name.ends_with(".pyd") || f_name.ends_with(".exe"))
+            && (f_name != "python3.dll")
         {
             filt_filenames.entry(f_name.clone()).or_insert(path.clone());
         }
     }
-	//Now that we have a list of present dlls can can loop over and find what imports are missing
+    //Now that we have a list of present dlls can can loop over and find what imports are missing
     for path in filt_filenames.clone().values() {
         let file = fs::read(path).unwrap();
         let win_pe = match Object::parse(&file).unwrap() {

@@ -19,7 +19,7 @@ fn main() {
             && (f_name.ends_with(".dll") || f_name.ends_with(".pyd") || f_name.ends_with(".exe"))
             && (f_name != "python3.dll")
         {
-			let path = String::from(entry.path().to_string_lossy()).to_lowercase();
+            let path = String::from(entry.path().to_string_lossy()).to_lowercase();
             filt_filenames.entry(f_name.clone()).or_insert(path.clone());
         }
     }
@@ -49,21 +49,24 @@ fn main() {
             }
         }
     }
-	//Now try to find paths to dll files in System32
-    for entry in WalkDir::new(r"C:\Windows\System32")
+    //Now try to find paths to dll files in System32
+    for entry in WalkDir::new(r"C:\windows\system32")
         .into_iter()
         .filter_map(Result::ok)
         .filter(|e| !e.file_type().is_dir())
     {
         let f_name = String::from(entry.file_name().to_string_lossy()).to_lowercase();
-		if filt_filenames.clone().contains_key(&f_name){
-			let path = String::from(entry.path().to_string_lossy()).to_lowercase();
-			*filt_filenames.get_mut(&f_name).unwrap() = path;
+        if filt_filenames.clone().contains_key(&f_name) {
+            let path = String::from(entry.path().to_string_lossy()).to_lowercase();
+            *filt_filenames.get_mut(&f_name).unwrap() = path;
+        }
+    }
+	//Copy dll files the the directory walker is run in
+    for (key, value) in filt_filenames.into_iter() {
+        println!("{:?}", key);
+		if key.ends_with(".dll") {
+			let dir: String = vec!["./",&key.as_str()].into_iter().collect();
+			std::fs::copy(value,dir).unwrap();
 		}
-				
-
-	}
-    for x in filt_filenames.iter() {
-        println!("{:?}", x);
     }
 }
